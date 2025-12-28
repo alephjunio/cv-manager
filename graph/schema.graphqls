@@ -14,7 +14,7 @@ type User {
   name: String!
 }
 
-type Query {
+extend type Query {
   todos: [Todo!]!
 }
 
