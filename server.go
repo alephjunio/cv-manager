@@ -10,7 +10,8 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/lru"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
-	"github.com/alephjunio/cv-manager/graph"
+	"github.com/alephjunio/cv-manager/generated"
+	"github.com/alephjunio/cv-manager/resolvers"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -22,7 +23,18 @@ func main() {
 		port = defaultPort
 	}
 
-	srv := handler.New(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
+	// router * chi.Mux := chi.NewRouter()
+	// router.Use(
+	// 	cors.Handler(
+	// 		cors.Options{
+	// 			AllowedOrigins:     []string{"*"},
+	// 			AllowedMethods:     []string{http.MethodGet, http.MethodPost, http.MethodDelete},
+	// 			AllowedCredentials: true,
+	// 		},
+	// 	),
+	// )
+
+	srv := handler.New(generated.NewExecutableSchema(generated.Config{Resolvers: &resolvers.Resolver{}}))
 
 	srv.AddTransport(transport.Options{})
 	srv.AddTransport(transport.GET{})

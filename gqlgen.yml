@@ -1,14 +1,14 @@
 # Where are all the schema files located? globs are supported eg  src/**/*.graphqls
 schema:
-  - graph/*.graphqls
+  - schemas/*.graphqls
 
 # Where should the generated server code go?
 exec:
-  package: graph
+  package: generated
   layout: single-file # Only other option is "follow-schema," ie multi-file.
 
   # Only for single-file layout:
-  filename: graph/generated.go
+  filename: generated/generated.go
 
   # Only for follow-schema layout:
   # dir: graph
@@ -27,7 +27,7 @@ exec:
 
 # Where should any generated models go?
 model:
-  filename: graph/model/models_gen.go
+  filename: model/models_gen.go
   package: model
 
   # Optional: Pass in a path to a new gotpl template to use for generating the models
@@ -35,40 +35,15 @@ model:
 
 # Where should the resolver implementations go?
 resolver:
-  package: graph
+  package: resolvers
   layout: follow-schema # Only other option is "single-file."
 
   # Only for single-file layout:
   # filename: graph/resolver.go
 
   # Only for follow-schema layout:
-  dir: graph
+  dir: resolvers
   filename_template: "{name}.resolvers.go"
-
-  # Optional: turn on to not generate template comments above resolvers
-  # omit_template_comment: false
-  # Optional: Pass in a path to a new gotpl template to use for generating resolvers
-  # resolver_template: [your/path/resolver.gotpl]
-  # Optional: turn on to avoid rewriting existing resolver(s) when generating
-  # preserve_resolver: false
-
-# Optional: turn on use ` + "`" + `gqlgen:"fieldName"` + "`" + ` tags in your models
-# struct_tag: json
-
-# Optional: turn on to use []Thing instead of []*Thing
-# omit_slice_element_pointers: false
-
-# Optional: turn on to omit Is<Name>() methods to interface and unions
-# omit_interface_checks: true
-
-# Optional: turn on to skip generation of ComplexityRoot struct content and Complexity function
-# omit_complexity: false
-
-# Optional: turn on to not generate any file notice comments in generated files
-# omit_gqlgen_file_notice: false
-
-# Optional: turn on to exclude the gqlgen version in the generated file notice. No effect if `omit_gqlgen_file_notice` is true.
-# omit_gqlgen_version_in_file_notice: false
 
 # Optional: turn on to exclude root models such as Query and Mutation from the generated models file.
 # omit_root_models: false
