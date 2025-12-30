@@ -20,9 +20,9 @@ type EnvVar struct {
 }
 
 type Environment struct {
-	Port string `env:"PORT"`
-	// DBName string `env:"DB_NAME,required"`
-	// DBUrl  string `env:"DB_URL,required"`
+	Port   string `env:"PORT"`
+	DBName string `env:"DB_NAME,required"`
+	DBUrl  string `env:"DB_URL,required"`
 }
 
 func GetEnv() *Environment {
@@ -57,7 +57,7 @@ func loadEnv() (*Environment, error) {
 		required := len(parts) > 1 && parts[1] == "required"
 
 		value := os.Getenv(name)
-		if required && value != "" {
+		if required && value == "" {
 			missingVars = append(missingVars, name)
 		}
 

@@ -10,18 +10,31 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/alephjunio/cv-manager/config"
+	"github.com/alephjunio/cv-manager/db"
 	"github.com/alephjunio/cv-manager/generated"
 	"github.com/alephjunio/cv-manager/resolvers"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
+	"github.com/joho/godotenv"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
 func main() {
+	// Load .env file
+	if err := godotenv.Load(); err != nil {
+		log.Println("Warning: .env file not found, using environment variables or defaults")
+	}
+
 	env := config.GetEnv()
 	port := env.Port
 	if port == "" {
 		port = config.DEFAULT_PORT
+	}
+
+	db, err := db.New(env.DBName)
+
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	router := chi.NewRouter()
@@ -35,7 +48,7 @@ func main() {
 		),
 	)
 
-	srv := handler.New(generated.NewExecutableSchema(generated.Config{Resolvers: &resolvers.Resolver{}}))
+	srv := handler.New(generated.NewExecutableSchema(generated.Config{Resolvers: &resolvers.Resolver{DB: db}}))
 
 	srv.AddTransport(transport.Options{})
 	srv.AddTransport(transport.GET{})
